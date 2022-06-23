@@ -1,0 +1,260 @@
+:root {
+	--background-color-a: hsl(0, 0%, 10%);
+	--background-color-b: hsl(0, 0%, 5%);
+	--background-color-c: hsl(0, 0%, 0%);
+
+	--color-a: hsl(0, 0%, 100%);
+	--color-b: hsl(0, 0%, 80%);
+
+	--highlight-color-a: hsla(0, 100%, 100%, 25%);
+	--highlight-color-b: hsla(0, 100%, 100%, 15%);
+
+	--header-height: 100px;
+	--menu-button-width: 50px;
+
+	--font-family: "Ubuntu", sans-serif;
+}
+
+html {
+	height: 100%;
+	font-size: 16px;
+}
+
+body {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	background-color: var(--background-color-c);
+	color: var(--color-a);
+	font-family: var(--font-family);
+}
+
+button, input {
+	appearance: none;
+	background: none;
+	border: none;
+	outline: none;
+}
+
+::selection {
+	color: var(--color-a);
+	background-color: var(--highlight-color-a);
+}
+
+header {
+	width: 100%;
+	height: var(--header-height);
+}
+
+.header-top, .header-bottom {
+	width: 100%;
+}
+
+.header-top {
+	height: calc(var(--header-height) / 3);
+	background-color: var(--background-color-c);
+	-webkit-user-select: none;
+  	-webkit-app-region: drag;
+}
+
+.menu-buttons, .tab-list {
+	height: inherit;
+}
+
+.tab-list {
+	display: flex;
+	margin-left: 20px;
+	margin-right: calc(var(--menu-button-width) * 3);
+}
+
+.tab {
+	position: relative;
+	display: flex;
+	gap: 7.5px;
+	align-items: center;
+	max-width: 200px;
+	height: calc(100% - 5px);
+	margin-top: 5px;
+	padding: 5px 10px;
+	flex-grow: 1;
+	background-color: var(--background-color-a);
+	border-radius: 15px 15px 0 0;
+	box-sizing: border-box;
+	-webkit-app-region: no-drag;
+}
+
+.tab .icon, .tab > button {
+	height: 100%;
+	aspect-ratio: 1;
+	border-radius: 50%;
+}
+
+.tab .icon {
+	position: relative;
+}
+
+.tab .icon > img, .tab .icon .loading-icon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 50%;
+}
+
+.tab:not(.loading) .icon > img {
+	display: block;
+}
+
+.tab .icon > img {
+	display: none;
+	width: 100%;
+	height: 100%;
+}
+
+.tab:not(.loading) .loading-icon {
+	display: none;
+}
+
+.tab.loading .loading-icon {
+	display: block;
+}
+
+.loading-icon {
+	width: calc(100% - 4px);
+	height: calc(100% - 4px);
+	margin: 2px;
+}
+
+.loading-icon div {
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	animation: spinning 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: #fff transparent transparent transparent;
+}
+
+.loading-icon div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+
+.loading-icon div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+
+.loading-icon div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+
+@keyframes spinning {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.tab #tab-title {
+	flex: 1;
+	margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+	font-size: 0.75rem;
+	user-select: none;
+}
+
+.tab > button {
+	color: var(--color-a);
+	box-sizing: border-box;
+	cursor: pointer;
+	transition: 200ms ease-in-out;
+}
+
+.tab > button:hover {
+	background-color: var(--highlight-color-b);
+}
+
+.menu-buttons {
+	position: fixed;
+	top: 0;
+	right: 0;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-end;
+	-webkit-app-region: no-drag;
+}
+
+.menu-buttons > button {
+	width: var(--menu-button-width);
+	height: inherit;
+	color: var(--color-b);
+	transition: 200ms ease-in-out;
+}
+
+.menu-buttons > button:hover {
+	background-color: var(--highlight-color-b);
+}
+
+.menu-buttons > button#close-window:hover {
+	background-color: #E81123;
+}
+
+.header-bottom {
+	display: flex;
+	flex-direction: column;
+	height: calc(var(--header-height) / 3 * 2);
+	background-color: var(--background-color-a);
+}
+
+.header-bottom > div {
+	height: 50%;
+}
+
+.nav-bar {
+	display: flex;
+}
+
+.nav-bar > button {
+	flex: 0 1;
+	display: flex;
+	justify-content: center;
+    align-items: center;
+	margin: 4px;
+    aspect-ratio: 1;
+	color: var(--color-a);
+	border-radius: 50%;
+	transition: 200ms ease-in-out;
+	cursor: pointer;
+}
+
+.nav-bar > button:hover {
+	background-color: var(--highlight-color-b);
+}
+
+.nav-bar > input#url {
+	flex: 1;
+	margin: 4px;
+	padding: 5px 10px;
+	font-size: 0.85rem;
+	color: var(--color-b);
+	background-color: var(--background-color-b);
+	border-radius: 9999px;
+	font-family: var(--font-family);
+}
+
+main {
+	width: 100%;
+	height: calc(100% - var(--header-height));
+}
+
+webview {
+	display: flex;
+	width: 100%;
+	height: 100%;
+}

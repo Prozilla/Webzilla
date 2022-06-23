@@ -1,0 +1,14 @@
+{
+  "name": "webzilla",
+  "version": "1.0.0",
+  "description": "A browser made with Electron.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Prozilla",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^19.0.5"
+  }
+}
