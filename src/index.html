@@ -7,7 +7,7 @@
 
 		<script rel="preconnect" src="https://kit.fontawesome.com/241f6baf1e.js" crossorigin="anonymous"></script>
 
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="css/common.css">
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 		<header>
 			<div class="header-top">
 				<div class="tab-list">
-					<div class="tab loading">
+					<div class="tab loading active">
 						<div class="icon">
 							<img id="favicon">
 							<div class="loading-icon"><div></div><div></div><div></div><div></div></div>
@@ -25,6 +25,22 @@
 						<p id="tab-title"></p>
 						<button><i class="fa-solid fa-xmark"></i></button>
 					</div>
+					<!-- <div class="tab loading">
+						<div class="icon">
+							<img id="favicon">
+							<div class="loading-icon"><div></div><div></div><div></div><div></div></div>
+						</div>
+						<p id="tab-title"></p>
+						<button><i class="fa-solid fa-xmark"></i></button>
+					</div>
+					<div class="tab loading">
+						<div class="icon">
+							<img id="favicon">
+							<div class="loading-icon"><div></div><div></div><div></div><div></div></div>
+						</div>
+						<p id="tab-title"></p>
+						<button><i class="fa-solid fa-xmark"></i></button>
+					</div> -->
 				</div>
 				<div class="menu-buttons">
 					<button id="close-window"><i class="fa-solid fa-xmark"></i></button>
@@ -34,8 +50,8 @@
 			</div>
 			<div class="header-bottom">
 				<div class="nav-bar">
-					<button><i class="fa-solid fa-angle-left"></i></button>
-					<button><i class="fa-solid fa-angle-right"></i></button>
+					<button id="go-back" class="arrow"><i class="fa-solid fa-angle-left"></i></button>
+					<button id="go-forward" class="arrow"><i class="fa-solid fa-angle-right"></i></button>
 					<button id="reload"><i class="fa-solid fa-rotate-right"></i></button>
 					<button id="home"><i class="fa-solid fa-house"></i></button>
 					<input id="url" type="text" spellcheck="false">

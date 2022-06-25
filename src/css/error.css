@@ -1,0 +1,33 @@
+body {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+body > i {
+	font-size: 3.5rem;
+}
+
+body > button {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	margin-top: 75px;
+    padding: 5px 20px;
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--background-color-c);
+	background-color: var(--color-a);
+    border-radius: 9999px;
+	cursor: pointer;
+	transition: 200ms ease-in-out;
+}
+
+body > button:hover {
+	background-color: var(--color-b);
+}
+
+body > button > i {
+	font-size: 1rem;
+}

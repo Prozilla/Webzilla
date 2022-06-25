@@ -9,6 +9,10 @@
   "author": "Prozilla",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^19.0.5"
+    "electron": "^19.0.6",
+    "electron-packager": "^15.5.1"
+  },
+  "dependencies": {
+    "electron-store": "^8.0.2"
   }
 }

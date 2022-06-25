@@ -1,52 +1,92 @@
-const { ipcRenderer, webContents } = require('electron');
+const { ipcRenderer } = require('electron');
+const { tab } = require("./js/tab");
 
 let urlInput;
-let closeWindowButton;
-let minimizeWindowButton;
 let toggleFullscreenButton;
 let browserView;
-let title;
-let reloadButton;
-let homeButton;
+let windowTitle;
+let goBackButton;
+let goForwardButton;
 
+let currentTab;
 let activeTab;
 
 window.addEventListener("DOMContentLoaded", () => {
-	closeWindowButton = document.getElementById("close-window")
-	minimizeWindowButton = document.getElementById("minimize-window")
-	toggleFullscreenButton = document.getElementById("toggle-fullscreen")
+	toggleFullscreenButton = document.getElementById("toggle-fullscreen");
 
-	closeWindowButton.addEventListener("click", () => { ipcRenderer.send("close-window"); });
-	minimizeWindowButton.addEventListener("click", () => { ipcRenderer.send("minimize-window"); });
+	document.getElementById("close-window").addEventListener("click", () => { ipcRenderer.send("close-window"); });
+	document.getElementById("minimize-window").addEventListener("click", () => { ipcRenderer.send("minimize-window"); });
 	toggleFullscreenButton.addEventListener("click", () => { ipcRenderer.send("maximize-window"); });
+
+	document.addEventListener("keydown", (event) => {
+		switch (event.key) {
+			case "F12":
+				ipcRenderer.send("open-dev-tools");
+				break;
+		}
+	});
 
 	urlInput = document.getElementById("url");
 
 	urlInput.addEventListener("keypress", (event) => {
 		if (event.key == "Enter") {
 			ipcRenderer.send("url-input", urlInput.value);
+			defocus();
 		}
 	});
 
-	urlInput.addEventListener("focus", () => { urlInput.select(); });
-
-	urlInput.addEventListener("focusout", (event) => {
-		window.getSelection().removeAllRanges();
+	urlInput.addEventListener("input", () => {
+		// fetch('/suggest?q=' + urlInput.value).then((response) => {
+		// 	return response.json();
+		// }).then((data) => {
+		// 	console.log(data);
+		// }).catch((err) => {
+		// 	console.warn('Something went wrong.', err);
+		// });
 	});
 
+	urlInput.addEventListener("focus", () => { urlInput.select(); });
+	urlInput.addEventListener("focusout", (event) => { defocus() });
+
 	browserView = document.getElementById("browser-view");
-	title = document.getElementById("title");
+	windowTitle = document.querySelector("title");
 
-	reloadButton = document.getElementById("reload");
-	homeButton = document.getElementById("home");
+	goBackButton = document.getElementById("go-back")
+	goForwardButton = document.getElementById("go-forward")
 
-	reloadButton.addEventListener("click", () => { ipcRenderer.send("reload"); });
-	homeButton.addEventListener("click", () => { ipcRenderer.send("load-homepage"); });
+	goBackButton.addEventListener("click", () => { ipcRenderer.send("go-back"); });
+	goForwardButton.addEventListener("click", () => { ipcRenderer.send("go-forward"); });
+
+	document.getElementById("reload").addEventListener("click", () => { ipcRenderer.send("reload"); });
+	document.getElementById("home").addEventListener("click", () => { ipcRenderer.send("load-homepage"); });
 
 	activeTab = document.querySelector(".tab-list").firstElementChild;
 
 	resizeBrowserview();
 });
+
+function defocus() {
+	window.getSelection().removeAllRanges();
+}
+
+function updateNavigation(canGoBack, canGoForward) {
+	console.log("can go back: " + canGoBack);
+	console.log("can go forward: " + canGoForward);
+
+	if (canGoBack) {
+		goBackButton.classList.remove("disabled");
+	} else {
+		goBackButton.classList.add("disabled");
+	}
+
+	if (canGoForward) {
+		goForwardButton.classList.remove("disabled");
+	} else {
+		goForwardButton.classList.add("disabled");
+	}
+}
+
+ipcRenderer.on("update-arrow-navigation", (event, navigation) => { updateNavigation(navigation.canGoBack, navigation.canGoForward); });
 
 ipcRenderer.on("toggled-fullscreen", (event, isFullscreen) => {
 	toggleFullscreenButton.firstChild.classList.remove(isFullscreen ? "fa-expand" : "fa-compress");
@@ -63,25 +103,37 @@ window.addEventListener("resize", () => {
 });
 
 function setPageTitle(title) {
-	activeTab.querySelector("#tab-title").textContent = title;
-	title.textContent = title + " - Webzilla";
+	if (activeTab != null) {
+		activeTab.querySelector("#tab-title").textContent = title;
+		windowTitle.textContent = title + " - Webzilla";
+	}
 }
 
-function setPageFavicon(favicons) {
-	activeTab.querySelector("#favicon").src = favicons[0];
+function setPageFavicon(favicon) {
+	currentTab.favicon = favicon;
+	faviconImage = activeTab.querySelector("#favicon");
+
+	if (favicon != null) {
+		faviconImage.src = currentTab.favicon;
+		// faviconImage.style.display = "block";
+	}
 }
 
 function setPageURL(url) {
-	urlInput.value = url;
+	if (urlInput != null)
+		urlInput.value = currentTab.isWebPage || currentTab.isErrorPage ? url : "webzilla://" + currentPage.title.toLowerCase();
 }
 
-ipcRenderer.on("page-update", (sender, page) => {
-	setPageTitle(page.title);
-	setPageURL(page.url);
+ipcRenderer.on("tab-update", (sender, tab) => {
+	currentTab = tab;
+	console.log(currentTab);
+
+	setPageTitle(currentTab.title);
+	setPageURL(currentTab.targetUrl);
 });
 
 ipcRenderer.on("page-title-update", (sender, title) => { setPageTitle(title); });
-ipcRenderer.on("page-favicon-update", (sender, favicons) => { setPageFavicon(favicons); });
+ipcRenderer.on("tab-favicon-update", (sender, favicon) => { setPageFavicon(favicon); });
 
-ipcRenderer.on("page-started-loading", () => { activeTab.classList.add("loading") });
-ipcRenderer.on("page-stopped-loading", () => { activeTab.classList.remove("loading") });
+ipcRenderer.on("page-started-loading", () => { activeTab.classList.add("loading"); });
+ipcRenderer.on("page-stopped-loading", () => { activeTab.classList.remove("loading"); });
