@@ -1,5 +1,7 @@
 # Webzilla
 
+Webzilla is a web browser made with ElectronJS by Prozilla.
+
 ## To do
 
 - Add multiple tab handling
