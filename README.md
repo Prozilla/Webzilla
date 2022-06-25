@@ -11,3 +11,4 @@ Webzilla is a web browser made with ElectronJS by Prozilla.
 - Display audio icon when playing audio
 - Store/load tab history
 - Custom color themes in settings page
+- Add a home page (inspired by chrome's)
