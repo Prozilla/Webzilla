@@ -12,3 +12,4 @@ Webzilla is a web browser made with ElectronJS by Prozilla.
 - Store/load tab history
 - Custom color themes in settings page
 - Add a home page (inspired by chrome's)
+- Reload button on error page should reload target URL instead of webcontents
